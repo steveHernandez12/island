@@ -1,0 +1,43 @@
+<dom-module id='island-finder-view'>
+	<link rel="import" href="island-finder-view-styles.html"/>
+	<template>
+		<div>
+			<label for="height">Height:</label>
+			<input id="height" on-change="heightWidthChanged" type="number" min="1" max="100" step="1" name="height" value="{{height::input}}" />
+		</div>
+		<div>
+			<label for="width">Width:</label>
+			<input id="width" on-change="heightWidthChanged" type="number" min="1" max="100" step="1" name="width" value="{{width::input}}" />
+		</div>
+		<div>
+			<label for="waterLevel">Water Level:</label>
+			<input id="waterLevel" type="number" min="1" max="100" step="1" name="waterLvl" value="{{waterLvl::input}}" />
+		</div>
+		<span class="error-message">{{errorMessage}}</span>
+
+		<template is="dom-repeat" items="{{islandMatrix}}" as="islandRow" index-as="rowNum">
+			<div>
+				<template is="dom-repeat" items="{{islandRow}}" as="islandSquare" index-as="colNum">
+					<input type="number" min="0" max="100" step="1"
+					       on-change="updateMatrixNode"
+					       data-row="{{rowNum}}"
+					       data-col="{{colNum}}"
+					       value="{{islandSquare.nodeValue::input}}" />
+				</template>
+			</div>
+		</template>
+
+		<button on-click="solve">SOLVE</button>
+		<div>
+			<div>{{numberOfIslands}} Island(s) Found</div>
+			<template is="dom-repeat" items="{{islandMatrix}}" as="islandRow" index-as="rowNum">
+				<div>
+					<template is="dom-repeat" items="{{islandRow}}" as="islandSquare" index-as="colNum">
+						<map-node node="{{islandSquare}}"></map-node>
+					</template>
+				</div>
+			</template>
+		</div>
+	</template>
+</dom-module>
+<script src="island-finder-view.js"></script>
