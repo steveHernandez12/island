@@ -2,6 +2,7 @@
 
 In order to run the application you will need to:
 
+* Clone the repo 
 * Install polymer-cli
 * Serve the application
 
