@@ -7,9 +7,16 @@ Polymer({
 		},
 		nodeStyle: String
 	},
+	/**
+	 * Default ready function. Calls node Changed to ensure styles are set when view renders.
+	 */
 	ready:function() {
 		this.nodeChanged();
 	},
+	/**
+	 * Checks if the difference to the water level is positive (land) or negative (water)
+	 * and calls the appropriate function
+	 */
 	nodeChanged: function() {
 		if(this.waterDiff <= 0) {
 			this.setNodeStyleBlue();
@@ -17,6 +24,10 @@ Polymer({
 			this.setNodeStyleBrown();
 		}
 	},
+	/**
+	 * Function sets the style for a node that represents water. Color gets darker depending on how large the difference
+	 * between the water lvl and the node is.
+	 */
 	setNodeStyleBlue: function() {
 		var style = "darkBlueNode";
 
@@ -30,6 +41,10 @@ Polymer({
 
 		this.set("nodeStyle", style)
 	},
+	/**
+	 * Function sets the style for a node that represents land. Color gets darker depending on how large the difference
+	 * between the water lvl and the node is.
+	 */
 	setNodeStyleBrown: function() {
 		var style = "darkBrownNode";
 

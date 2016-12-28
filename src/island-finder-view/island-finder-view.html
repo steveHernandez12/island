@@ -7,7 +7,7 @@
 				<p>Adjust the height and width and the input grid will update itself.
 					<br>Fill in the grid with values and click solve to find out how many Islands there are.
 					<br>Adjusting height, width, or the grid values will reset the result map.
-					<br>THe darker the color (blue or brown) the larger the difference the node is from the water level.
+					<br>The darker the color (blue or brown) the larger the difference the node is from the water level (changes at increments of 5).
 				</p>
 			</div>
 			<div class="height-section">
@@ -29,7 +29,7 @@
 					<div>
 						<template is="dom-repeat" items="{{islandRow}}" as="islandSquare" index-as="colNum">
 							<input type="number" min="0" max="100" step="1"
-							       on-change="updateMatrixNode"
+							       on-change="updateIslandGridNode"
 							       data-row="{{rowNum}}"
 							       data-col="{{colNum}}"
 							       value="{{islandSquare.nodeValue::input}}" />
