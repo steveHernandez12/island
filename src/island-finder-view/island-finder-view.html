@@ -1,39 +1,52 @@
-<dom-module id='island-finder-view'>
+<dom-module id='island-finder-view' xmlns="http://www.w3.org/1999/html">
 	<link rel="import" href="island-finder-view-styles.html"/>
 	<template>
-		<div>
-			<label for="height">Height:</label>
-			<input id="height" on-change="heightWidthChanged" type="number" min="1" max="100" step="1" name="height" value="{{height::input}}" />
-		</div>
-		<div>
-			<label for="width">Width:</label>
-			<input id="width" on-change="heightWidthChanged" type="number" min="1" max="100" step="1" name="width" value="{{width::input}}" />
-		</div>
-		<div>
-			<label for="waterLevel">Water Level:</label>
-			<input id="waterLevel" type="number" min="1" max="100" step="1" name="waterLvl" value="{{waterLvl::input}}" />
-		</div>
-		<span class="error-message">{{errorMessage}}</span>
+		<style include="island-finder-view-styles"></style>
+		<div class="options-container">
+			<div class="instructions">
+				<p>Adjust the height and width and the input grid will update itself.
+					<br>Fill in the grid with values and click solve to find out how many Islands there are.
+					<br>Adjusting height, width, or the grid values will reset the result map.
+					<br>THe darker the color (blue or brown) the larger the difference the node is from the water level.
+				</p>
+			</div>
+			<div class="height-section">
+				<label for="height">Height:</label>
+				<input id="height" on-change="heightWidthChanged" type="number" min="1" max="100" step="1" name="height" value="{{height::input}}" />
+			</div>
+			<div class="width-section">
+				<label for="width">Width:</label>
+				<input id="width" on-change="heightWidthChanged" type="number" min="1" max="100" step="1" name="width" value="{{width::input}}" />
+			</div>
+			<div class="water-level-section">
+				<label for="waterLevel">Water Level:</label>
+				<input id="waterLevel" on-change="waterLvlChanged" type="number" min="1" max="100" step="1" name="waterLvl" value="{{waterLvl::input}}" />
+			</div>
+			<span class="error-message">{{errorMessage}}</span>
 
-		<template is="dom-repeat" items="{{islandMatrix}}" as="islandRow" index-as="rowNum">
-			<div>
-				<template is="dom-repeat" items="{{islandRow}}" as="islandSquare" index-as="colNum">
-					<input type="number" min="0" max="100" step="1"
-					       on-change="updateMatrixNode"
-					       data-row="{{rowNum}}"
-					       data-col="{{colNum}}"
-					       value="{{islandSquare.nodeValue::input}}" />
+			<div class="island-map-input">
+				<template is="dom-repeat" items="{{islandMatrix}}" as="islandRow" index-as="rowNum">
+					<div>
+						<template is="dom-repeat" items="{{islandRow}}" as="islandSquare" index-as="colNum">
+							<input type="number" min="0" max="100" step="1"
+							       on-change="updateMatrixNode"
+							       data-row="{{rowNum}}"
+							       data-col="{{colNum}}"
+							       value="{{islandSquare.nodeValue::input}}" />
+						</template>
+					</div>
 				</template>
 			</div>
-		</template>
 
-		<button on-click="solve">SOLVE</button>
-		<div>
+			<button on-click="solve">SOLVE</button>
+		</div>
+
+		<div class="results-container">
 			<div>{{numberOfIslands}} Island(s) Found</div>
-			<template is="dom-repeat" items="{{islandMatrix}}" as="islandRow" index-as="rowNum">
+			<template is="dom-repeat" items="{{completedIslandMap}}" as="completedRow" index-as="rowNum">
 				<div>
-					<template is="dom-repeat" items="{{islandRow}}" as="islandSquare" index-as="colNum">
-						<map-node node="{{islandSquare}}"></map-node>
+					<template is="dom-repeat" items="{{completedRow}}" as="completedNode" index-as="colNum">
+						<map-node water-diff="{{completedNode.waterDiff}}"></map-node>
 					</template>
 				</div>
 			</template>

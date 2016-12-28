@@ -18,20 +18,43 @@ Polymer({
 			type: Number,
 			value: 0
 		},
-		islandMatrix: Array
+		islandMatrix: Array,
+		completedIslandMap: {
+			type: Array
+		}
 	},
 	ready: function() {
 		this.updateMatrix();
 	},
 	heightWidthChanged: function() {
 		if(this.height > 0 && this.width > 0) {
+			this.clear();
 			this.set("errorMessage", "");
 			this.updateMatrix();
+		} else if(this.height >= 10 || this.width >= 10) {
+			this.set("errorMessage", "Warning: Large grids may result in slower performance");
 		} else {
 			this.set("errorMessage", "Invalid height or width");
 			this.set("height", this.islandMatrix.length);
 			this.set("width", this.islandMatrix[0].length);
 		}
+	},
+	waterLvlChanged: function() {
+		this.clear();
+		var newMatrix = [];
+		for(var h = 0; h < this.height; h++) {
+			var newRow = [];
+			for(var w = 0; w < this.width; w++) {
+				var oldItem = this.islandMatrix[h][w];
+				newRow[w] = {
+					nodeValue: oldItem ? oldItem.nodeValue : 0,
+					waterDiff: oldItem.nodeValue - this.waterLvl,
+					checked: false
+				};
+			}
+			newMatrix.push(newRow);
+		}
+		this.set("islandMatrix", newMatrix);
 	},
 	updateMatrix: function() {
 		var newMatrix = [];
@@ -49,6 +72,7 @@ Polymer({
 		this.set("islandMatrix", newMatrix);
 	},
 	updateMatrixNode: function(e) {
+		this.clear();
 		var tempMatrix = this.islandMatrix;
 		var row = e.target.dataRow;
 		var col = e.target.dataCol;
@@ -68,9 +92,14 @@ Polymer({
 				}
 			}
 		}
+
+		this.set("completedIslandMap", this.islandMatrix);
 		this.set("numberOfIslands", cnt);
 
 		this.reset();
+	},
+	clear: function() {
+		this.set("completedIslandMap", []);
 	},
 	clean_block: function(A, x_in, y_in, cur_cnt) {
 		A[x_in][y_in].checked = true;
